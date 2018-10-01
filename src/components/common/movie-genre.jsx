@@ -4,24 +4,20 @@ const MovieGenre = props => {
   const {
     genreItems,
     onGenreChange,
-    selectGenre,
+    selectedGenre,
     textProperty,
     valueProperty
   } = props;
   return (
     <ul className="list-group">
-      <li
-        className={!selectGenre ? "list-group-item active" : "list-group-item"}
-        onClick={() => onGenreChange()}
-      >
-        All Genres
-      </li>
       {genreItems.map(item => (
         <li
           onClick={() => onGenreChange(item)}
           key={item[valueProperty]}
           className={
-            selectGenre === item ? "list-group-item active" : "list-group-item"
+            selectedGenre === item
+              ? "list-group-item active"
+              : "list-group-item"
           }
         >
           {item[textProperty]}
