@@ -61,7 +61,7 @@ class Movies extends Component {
     if (count === 0) return <p>No movie in the database</p>;
     return (
       <div className="row">
-        <div className="col-4">
+        <div className="col-3">
           <MovieGenre
             selectedGenre={selectedGenre}
             genreItems={genreList}
