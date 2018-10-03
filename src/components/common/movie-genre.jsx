@@ -12,6 +12,7 @@ const MovieGenre = props => {
     <ul className="list-group">
       {genreItems.map(item => (
         <li
+          style={{ cursor: "pointer" }}
           onClick={() => onGenreChange(item)}
           key={item[valueProperty]}
           className={

@@ -22,16 +22,21 @@ class TableHeader extends Component {
     return (
       <thead>
         <tr>
-          {columns.map(col => (
-            <th
-              className="clickable"
-              key={col.path || col.key}
-              onClick={() => this.raiseSort(col.path)}
-            >
-              {col.label}
-              {this.renderSortIcon(col)}
-            </th>
-          ))}
+          {columns.map(
+            col =>
+              col.path ? (
+                <th
+                  className="clickable"
+                  key={col.path || col.key}
+                  onClick={() => this.raiseSort(col.path)}
+                >
+                  {col.label}
+                  {this.renderSortIcon(col)}
+                </th>
+              ) : (
+                <th key={col.key} />
+              )
+          )}
         </tr>
       </thead>
     );
