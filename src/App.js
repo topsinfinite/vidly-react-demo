@@ -22,7 +22,7 @@ class App extends Component {
             <Route path="/notfound" component={NotFound} />
             <Route path="/" exact component={Movie} />
 
-            <Redirect to="/notfound" />
+            <Redirect to="/notfound"git  />
           </Switch>
         </main>
       </React.Fragment>
