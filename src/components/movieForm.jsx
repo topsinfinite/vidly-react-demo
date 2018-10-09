@@ -5,6 +5,22 @@ class MovieForm extends Form {
     data: { title: "", genre: "", stock: "", rate: "" },
     errors: {}
   };
+  schema = {
+    title: Joi.string()
+      .required()
+      .label("Title"),
+    genre: Joi.string()
+      .required()
+      .label("Genre"),
+    stock: Joi.number()
+      .min(0)
+      .max(100)
+      .label("Number in stock")
+      .required(),
+    rate: Joi.number()
+      .min(1)
+      .max(10)
+  };
   handleSave = () => {
     this.props.history.push("/movies");
   };
