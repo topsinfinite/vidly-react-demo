@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
 import { getMovies } from "../services/fakeMovieService";
-import { getGenres, getGenresById } from "../services/fakeGenreService";
+import { getGenres } from "../services/fakeGenreService";
 import MoviesTable from "./moviesTable";
 import Pagination from "./common/pagination";
 import { Paginate } from "../utils/paginate";
@@ -79,6 +80,9 @@ class Movies extends Component {
           />
         </div>
         <div className="col">
+          <NavLink className="btn btn-primary" to="/movies/new" role="button">
+            New Movie
+          </NavLink>
           <p>Showing {totalCount} movies in the database.</p>
           <MoviesTable
             movies={movies}
