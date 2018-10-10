@@ -13,7 +13,7 @@ class MovieForm extends Form {
     return (
       <div>
         <h1>Movie Form</h1>
-
+        {}
         <button onClick={this.handleSave} className="btn btn-primary">
           Save
         </button>
