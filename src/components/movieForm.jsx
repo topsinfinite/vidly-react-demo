@@ -7,14 +7,14 @@ import { saveMovie, getMovie } from "../services/fakeMovieService";
 class MovieForm extends Form {
   state = {
     data: { title: "", genre: "", numberInStock: "", dailyRentalRate: "" },
-    selectData: [],
+    selectData: [{ _id: "", name: "...Select Genre..." }, ...getGenres()],
     errors: {}
   };
   schema = {
     title: Joi.string()
       .required()
       .label("Title"),
-    genre: Joi.string(),
+    genre: Joi.string().required(),
     _id: Joi.string(),
     numberInStock: Joi.number()
       .min(0)
@@ -26,10 +26,9 @@ class MovieForm extends Form {
       .max(10)
   };
   componentDidMount() {
-    const selectData = getGenres();
     const { match } = this.props;
     const { data } = this.state;
-    this.setState({ selectData });
+
     if (match.params.id) {
       const movie = getMovie(match.params.id);
       if (movie) {
@@ -42,9 +41,6 @@ class MovieForm extends Form {
       } else {
         this.props.history.push("/notfound");
       }
-    } else {
-      data.genre = "5b21ca3eeb7f6fbccd471818";
-      this.setState({ data });
     }
   }
   handleSelect = e => {
