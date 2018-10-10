@@ -7,6 +7,7 @@ import Pagination from "./common/pagination";
 import { Paginate } from "../utils/paginate";
 import MovieGenre from "./common/movie-genre";
 import _ from "lodash";
+import { deleteMovie } from "../services/fakeMovieService";
 
 class Movies extends Component {
   state = {
@@ -24,6 +25,7 @@ class Movies extends Component {
   }
   handleDelete = movie => {
     const movies = this.state.movies.filter(m => m._id !== movie._id);
+    deleteMovie(movie._id);
     this.setState({ movies });
   };
   handleLike = movie => {
