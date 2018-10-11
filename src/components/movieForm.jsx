@@ -39,7 +39,7 @@ class MovieForm extends Form {
         data.dailyRentalRate = movie.dailyRentalRate;
         this.setState({ data });
       } else {
-        this.props.history.push("/notfound");
+        this.props.history.replace("/notfound");
       }
     }
   }
