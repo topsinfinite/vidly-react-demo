@@ -85,6 +85,7 @@ class Movies extends Component {
           <NavLink className="btn btn-primary" to="/movies/new" role="button">
             New Movie
           </NavLink>
+          
           <p>Showing {totalCount} movies in the database.</p>
           <MoviesTable
             movies={movies}
