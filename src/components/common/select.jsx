@@ -5,17 +5,18 @@ const SelectInput = props => {
     dataList,
     textProperty,
     valueProperty,
-    selectedValue,
+    value,
     name,
     label,
-    onSelect
+    error,
+    onChange
   } = props;
   return (
     <div className="form-group">
       <label htmlFor="genre">{label}</label>
       <select
-        onChange={onSelect}
-        value={selectedValue}
+        onChange={onChange}
+        value={value}
         className="custom-select form-control"
         name={name}
         id={name}
@@ -26,6 +27,7 @@ const SelectInput = props => {
           </option>
         ))}
       </select>
+      {error && <div className="alert alert-danger">{error}</div>}
     </div>
   );
 };

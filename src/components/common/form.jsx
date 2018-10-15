@@ -63,14 +63,16 @@ class Form extends Component {
       />
     );
   };
-  renderSelect = (selectData, selectedItem, name, label, onSelect) => {
+  renderSelect = (selectData, name, label) => {
+    const { data, errors } = this.state;
     return (
       <SelectInput
         dataList={selectData}
+        value={data[name]}
         name={name}
         label={label}
-        selectedValue={selectedItem}
-        onSelect={onSelect}
+        error={errors[name]}
+        onChange={this.handleChange}
       />
     );
   };

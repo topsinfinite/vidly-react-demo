@@ -8,6 +8,7 @@ import { Paginate } from "../utils/paginate";
 import MovieGenre from "./common/movie-genre";
 import _ from "lodash";
 import { deleteMovie } from "../services/fakeMovieService";
+import SearchInput from "./common/searchInput";
 
 class Movies extends Component {
   state = {
@@ -15,7 +16,9 @@ class Movies extends Component {
     genreList: [],
     pageSize: 4,
     currentPage: 1,
-    sortColumn: { path: "title", order: "asc" }
+    sortColumn: { path: "title", order: "asc" },
+    searchText: "",
+    selectedGenre: null
   };
   componentDidMount() {
     const movies = getMovies();
@@ -39,7 +42,7 @@ class Movies extends Component {
     this.setState({ currentPage: page });
   };
   handleGenreChange = genre => {
-    this.setState({ selectedGenre: genre, currentPage: 1 });
+    this.setState({ selectedGenre: genre, currentPage: 1, searchText: "" });
   };
   handleSort = sortColumn => {
     this.setState({ sortColumn });
@@ -50,16 +53,32 @@ class Movies extends Component {
       currentPage,
       sortColumn,
       movies: allMovies,
-      selectedGenre
+      selectedGenre,
+      searchText
     } = this.state;
 
-    const filtered =
-      selectedGenre && selectedGenre._id
-        ? allMovies.filter(m => m.genre._id === selectedGenre._id)
-        : allMovies;
+    const filtered = this.handleFiltering(selectedGenre, searchText, allMovies);
     const ordered = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     const movies = Paginate(ordered, currentPage, pageSize);
     return { totalCount: filtered.length, movies: movies };
+  };
+  handleFiltering = (selectedGenre, searchText, allMovies) => {
+    if (selectedGenre && selectedGenre._id) {
+      return allMovies.filter(m => m.genre._id === selectedGenre._id);
+    }
+    if (searchText) {
+      return allMovies.filter(m => {
+        return m.title.toUpperCase().indexOf(searchText.toUpperCase()) !== -1;
+      });
+    }
+    return allMovies;
+  };
+  handleSearch = query => {
+    this.setState({
+      searchText: query,
+      selectedGenre: null,
+      currentPage: 1
+    });
   };
   render() {
     const { length: count } = this.state.movies;
@@ -86,6 +105,12 @@ class Movies extends Component {
             New Movie
           </NavLink>
           <p>Showing {totalCount} movies in the database.</p>
+          <SearchInput
+            name="search"
+            placeholder="Search..."
+            value={this.state.searchText}
+            onChange={this.handleSearch}
+          />
           <MoviesTable
             movies={movies}
             sortColumn={sortColumn}
