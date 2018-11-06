@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import Joi from "joi-browser";
 import Form from "./common/form";
-import { getGenres } from "../services/fakeGenreService";
-import { saveMovie, getMovie } from "../services/fakeMovieService";
+import { getGenres } from "../services/genreService";
+import { saveMovie, getMovie } from "../services/movieService";
+import { toast } from "react-toastify";
 
 class MovieForm extends Form {
   state = {
@@ -12,7 +13,7 @@ class MovieForm extends Form {
       numberInStock: "",
       dailyRentalRate: ""
     },
-    genres: [{ _id: "", name: "...Select Genre..." }, ...getGenres()],
+    genres: [],
     errors: {}
   };
   schema = {
@@ -33,20 +34,34 @@ class MovieForm extends Form {
       .min(1)
       .max(10)
   };
-  componentDidMount() {
-    const { match } = this.props;
-    const movieId = match.params.id;
+  populateGenre = async () => {
+    const { data } = await getGenres();
+    const genres = [{ _id: "", name: "All Genres" }, ...data];
+    this.setState({ genres });
+  };
+  async populateMovie() {
+    const movieId = this.props.match.params.id;
     if (movieId === "new") return;
-
-    const movie = getMovie(movieId);
-    if (!movie) return this.props.history.push("/notfound");
-
-    this.setState({ data: this.mapMovieToViewModel(movie) });
+    try {
+      const { data: movie } = await getMovie(movieId);
+      this.setState({ data: this.mapMovieToViewModel(movie) });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        return this.props.history.push("/notfound");
+    }
   }
-  doSubmit = () => {
+  async componentDidMount() {
+    await this.populateGenre();
+    await this.populateMovie();
+  }
+  doSubmit = async () => {
     const { data: movie } = this.state;
-    saveMovie(movie);
-    this.props.history.push("/movies");
+    try {
+      await saveMovie(movie);
+      this.props.history.push("/movies");
+    } catch (ex) {
+      toast.error("An error occurred...");
+    }
   };
   mapMovieToViewModel = movie => {
     return {
