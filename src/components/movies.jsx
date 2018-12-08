@@ -99,6 +99,7 @@ class Movies extends Component {
       genreList,
       selectedGenre
     } = this.state;
+    const { user } = this.props;
     const { totalCount, movies } = this.getPagedData();
     if (count === 0) return <p>No movie in the database</p>;
     return (
@@ -111,9 +112,11 @@ class Movies extends Component {
           />
         </div>
         <div className="col">
-          <NavLink className="btn btn-primary" to="/movies/new" role="button">
-            New Movie
-          </NavLink>
+          {user && (
+            <NavLink className="btn btn-primary" to="/movies/new" role="button">
+              New Movie
+            </NavLink>
+          )}
           <p>Showing {totalCount} movies in the database.</p>
           <SearchInput
             name="search"

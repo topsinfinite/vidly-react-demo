@@ -1,6 +1,8 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "./common/form";
+import * as userService from "../services/userService";
+import auth from "../services/authService";
 
 class RegisterForm extends Form {
   state = {
@@ -22,15 +24,20 @@ class RegisterForm extends Form {
       .required()
   };
 
-  doSubmit = () => {
+  doSubmit = async () => {
     //handle API calls
-    const { fullname, username } = this.state.data;
-    console.log(`Username:${username}  fullname:${fullname}`);
-    const data = { ...this.state.data };
-    data.username = "";
-    data.password = "";
-    data.fullname = "";
-    this.setState({ data });
+    try {
+      const response = await userService.register(this.state.data);
+      auth.loginWithJwt(response.headers["x-auth-token"]);
+      window.location = "/";
+    } catch (ex) {
+      console.log(ex.response);
+      if (ex.response && ex.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.username = ex.response.data;
+        this.setState({ errors });
+      }
+    }
   };
   render() {
     return (
